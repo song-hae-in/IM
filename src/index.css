@@ -1,0 +1,143 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.custom-heading {
+  font-size: 2.25rem; /* text-4xl */
+  font-weight: bold;
+  color: #32ff6a; /* 네온 그린 */
+}
+
+.custom-subheading {
+  font-size: 1.5rem;
+  color: #ffffff; /* 흰색 */
+}
+
+.custom-button {
+  background-color: #ff007a; /* 네온 핑크 */
+  color: #000000; /* 브랜드 블랙 */
+  padding: 0.5rem 1rem; /* py-2 px-4 */
+  border-radius: 0.375rem; /* rounded */
+}
+
+/* 추가 커스텀 클래스 예시 */
+.custom-input-ellipse {
+  width: 100%;
+  height: 40px;
+  border: 2px solid #32ff6a; /* 네온 그린 */
+  border-radius: 50px; /* 타원형 */
+  background-color: #1a1a1a; /* 짙은 회색 */
+  color: #ffffff; /* 흰색 */
+  padding: 0 16px;
+}
+
+.button-send {
+  background-color: #ff007a; /* 네온 핑크 */
+  color: #000000; /* 브랜드 블랙 */
+  padding: 0 16px;
+  height: 40px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap; /* 버튼 텍스트가 줄바꿈되지 않도록 설정 */
+}
+
+.button-send.loading {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.fade-in {
+  @apply opacity-0;
+  animation: fadeIn 1.5s ease-in forwards;
+  animation-delay: 0.3s;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* 바이탈 신호 애니메이션 */
+@keyframes vitalSignal {
+  0% {
+    transform: scaleY(1);
+  }
+  5% {
+    transform: scaleY(1.5);
+  }
+  10% {
+    transform: scaleY(0.5);
+  }
+  15% {
+    transform: scaleY(1.2);
+  }
+  20% {
+    transform: scaleY(0.8);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
+
+.border-vital {
+  position: relative;
+}
+
+.border-vital::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px; /* 선 두께 */
+  background-color: #ff1493; /* 네온 핑크 */
+  animation: vitalSignal 2s infinite; /* 2초 주기로 반복 */
+  transform-origin: left center; /* 왼쪽을 기준으로 확대·축소 */
+}
+
+/*chat page*/
+.center-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 500px;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* 모달 콘텐츠 */
+.modal-content {
+  background: rgb(244, 69, 98); /* 다크 그레이 */
+  padding: 0.7rem;
+  border-radius: 0.5rem;
+  max-width: 600px;
+  width: 100%;
+  color: white;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100%; /* 화면 높이에 100% 맞춤 */
+  width: 100%; /* 화면 너비에 100% 맞춤 */
+  overflow: hidden; /* 스크롤을 강제로 숨김 */
+  background-color: rgb(15, 14, 14); /* 기본 배경색 (다크모드 예시) */
+}

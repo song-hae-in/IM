@@ -1,0 +1,34 @@
+[
+  {
+    "path": "src/assets/README.md",
+    "code": "# Static Assets\n\nThis folder is intended to store static assets such as images, fonts, and other media files.\nWhile not strictly necessary for the current Minimum Viable Product (MVP), it is included for future expansion and organization.\n"
+  },
+  {
+    "path": "src/components/GreetingDisplay.tsx",
+    "code": "import React from 'react';\n\ninterface GreetingDisplayProps {\n  greeting: string;\n}\n\nconst GreetingDisplay: React.FC<GreetingDisplayProps> = ({ greeting }) => {\n  return (\n    <div className=\"greeting-display\">\n      <h1 className=\"greeting-text\">{greeting}</h1>\n    </div>\n  );\n};\n\nexport default GreetingDisplay;\n"
+  },
+  {
+    "path": "src/hooks/useDailyGreeting.ts",
+    "code": "import { useState, useEffect } from 'react';\nimport { getRandomGreeting } from '../services/greetingService';\nimport { getTodayDateString, isSameDay } from '../utils/dateUtils';\n\nconst LAST_GREETING_DATE_KEY = 'lastGreetingDate';\nconst DAILY_GREETING_KEY = 'dailyGreeting';\n\nexport const useDailyGreeting = () => {\n  const [dailyGreeting, setDailyGreeting] = useState<string>('오늘의 인사말을 불러오는 중...');\n\n  useEffect(() => {\n    const today = getTodayDateString();\n    const storedLastGreetingDate = localStorage.getItem(LAST_GREETING_DATE_KEY);\n    const storedDailyGreeting = localStorage.getItem(DAILY_GREETING_KEY);\n\n    if (storedLastGreetingDate && isSameDay(storedLastGreetingDate, today) && storedDailyGreeting) {\n      // If it's the same day and a greeting is stored, use it\n      setDailyGreeting(storedDailyGreeting);\n    } else {\n      // If it's a new day or no greeting is stored, fetch a new one\n      const newGreeting = getRandomGreeting();\n      setDailyGreeting(newGreeting);\n      localStorage.setItem(DAILY_GREETING_KEY, newGreeting);\n      localStorage.setItem(LAST_GREETING_DATE_KEY, today);\n    }\n  }, []); // Run only once on component mount\n\n  return dailyGreeting;\n};\n"
+  },
+  {
+    "path": "src/services/greetingService.ts",
+    "code": "// src/services/greetingService.ts\n\nconst predefinedGreetings: string[] = [\n  \"안녕하세요! 좋은 하루 되세요!\",\n  \"오늘도 힘찬 하루 보내세요!\",\n  \"반갑습니다! 행복한 하루 되시길 바랍니다.\",\n  \"좋은 아침입니다! 즐거운 일 가득하세요.\",\n  \"오늘 하루도 웃음꽃 피우세요!\",\n  \"새로운 시작, 새로운 인사! 반갑습니다.\",\n  \"항상 건강하시고 행복하세요.\",\n  \"오늘의 행운을 빕니다!\",\n  \"언제나 당신을 응원합니다!\",\n  \"편안하고 기분 좋은 하루 되세요.\"\n];\n\nexport const getRandomGreeting = (): string => {\n  const randomIndex = Math.floor(Math.random() * predefinedGreetings.length);\n  return predefinedGreetings[randomIndex];\n};\n\n// 향후 외부 API 연동을 위한 함수 추가 가능성:\n// export const fetchGreetingFromApi = async (): Promise<string> => {\n//   try {\n//     const response = await fetch('YOUR_API_ENDPOINT');\n//     if (!response.ok) {\n//       throw new Error(`HTTP error! status: ${response.status}`);\n//     }\n//     const data = await response.json();\n//     return data.greeting; // 가정: API 응답에 'greeting' 필드가 있음\n//   } catch (error) {\n//     console.error(\"Error fetching greeting from API:\", error);\n//     return getRandomGreeting(); // API 호출 실패 시 대체 인사말 제공\n//   }\n// };\n"
+  },
+  {
+    "path": "src/styles/global.css",
+    "code": "/* src/styles/global.css */\n\nbody {\n  margin: 0;\n  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',\n    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',\n    sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  background-color: #f0f2f5;\n  color: #333;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  min-height: 100vh;\n}\n\ncode {\n  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',\n    monospace;\n}\n\n.app-container {\n  text-align: center;\n  padding: 20px;\n  background-color: #ffffff;\n  border-radius: 12px;\n  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);\n  max-width: 600px;\n  width: 90%;\n}\n\n.greeting-display {\n  margin-top: 20px;\n}\n\n.greeting-text {\n  font-size: 2.5em;\n  color: #4a90e2;\n  margin: 0;\n  padding: 10px 0;\n  line-height: 1.3;\n}\n\n@media (max-width: 600px) {\n  .greeting-text {\n    font-size: 1.8em;\n  }\n}\n"
+  },
+  {
+    "path": "src/utils/dateUtils.ts",
+    "code": "// src/utils/dateUtils.ts\n\n/**\n * 오늘 날짜를 'YYYY-MM-DD' 형식의 문자열로 반환합니다.\n * @returns {string} 오늘 날짜 문자열\n */\nexport const getTodayDateString = (): string => {\n  const today = new Date();\n  const year = today.getFullYear();\n  const month = (today.getMonth() + 1).toString().padStart(2, '0'); // 월은 0부터 시작하므로 +1\n  const day = today.getDate().toString().padStart(2, '0');\n  return `${year}-${month}-${day}`;\n};\n\n/**\n * 두 날짜 문자열이 같은 날짜를 나타내는지 비교합니다.\n * (예: 'YYYY-MM-DD' 형식)\n * @param {string} dateString1 첫 번째 날짜 문자열\n * @param {string} dateString2 두 번째 날짜 문자열\n * @returns {boolean} 두 날짜가 같으면 true, 아니면 false\n */\nexport const isSameDay = (dateString1: string, dateString2: string): boolean => {\n  return dateString1 === dateString2;\n};\n"
+  },
+  {
+    "path": "src/App.tsx",
+    "code": "import React from 'react';\nimport GreetingDisplay from './components/GreetingDisplay';\nimport { useDailyGreeting } from './hooks/useDailyGreeting';\n\nfunction App() {\n  const dailyGreeting = useDailyGreeting();\n\n  return (\n    <div className=\"app-container\">\n      <header>\n        <h1>오늘의 인사말</h1>\n      </header>\n      <main>\n        <GreetingDisplay greeting={dailyGreeting} />\n      </main>\n    </div>\n  );\n}\n\nexport default App;\n"
+  },
+  {
+    "path": "src/index.tsx",
+    "code": "import React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './styles/global.css'; // 전역 스타일 불러오기\nimport App from './App';\n\nconst root = ReactDOM.createRoot(\n  document.getElementById('root') as HTMLElement\n);\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+  }
+]
